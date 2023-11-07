@@ -1,11 +1,11 @@
 <?php
-require 'vendor/autoload.php';
+require 'data_init/vendor/autoload.php';
 
 $faker = Faker\Factory::create('en_PH');
 $host = 'localhost';
 $username = 'root'; 
-$password = 'kokororokorokoko'; 
-$database = 'appdev'; 
+$password = 'root'; 
+$database = 'default'; 
 
 try {
     // Create a PDO database connection
