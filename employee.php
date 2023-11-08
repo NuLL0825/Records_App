@@ -4,7 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+<<<<<<< HEAD
     <link rel="icon" type="image/png" href="assets/img/favicon.ico">
+=======
+    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Light Bootstrap Dashboard - Free Bootstrap 4 Admin Dashboard by Creative Tim</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
@@ -24,13 +28,21 @@
     require('config/db.php');
 
     // CREATE QUERY
+<<<<<<< HEAD
     $query = 'SELECT * FROM employee';
+=======
+    $query = 'SELECT employee.lastname, employee.firstname, employee.address, office.name AS office_name FROM employee, office WHERE employee.office_id = office.id';
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
 
     // Get the result
     $result = mysqli_query($conn, $query);
 
     // Fetch the data
+<<<<<<< HEAD
     $employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
+=======
+    $offices = mysqli_fetch_all( $result, MYSQLI_ASSOC );
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
 
     // Free result
     mysqli_free_result($result);
@@ -43,11 +55,18 @@
             
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php');?>
+<<<<<<< HEAD
                 
             </div>
         </div>
         <div class="main-panel">
             <?php include('includes/navbar.php'); ?>
+=======
+            </div>
+        </div>
+        <div class="main-panel">
+            <?php include('includes/navbar.php');?>
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
             
             <div class="content">
                 <div class="container-fluid">
@@ -56,6 +75,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+<<<<<<< HEAD
                             <br/>
                                 <div class="col-md-12">
                                     <a href="employee-add.php">
@@ -65,10 +85,16 @@
                                 <div class="card-header ">
                                     <h4 class="card-title">Employees</h4>
                                     <p class="card-category">Our beloved workforce.</p>
+=======
+                                <div class="card-header ">
+                                    <h4 class="card-title">Employees</h4>
+                                    <p class="card-category">Here is a subtitle for this table</p>
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
+<<<<<<< HEAD
                                             <th>Last Name</th>
                                             <th>First Name</th>
                                             <th>Office ID</th>
@@ -83,6 +109,24 @@
                                                 <td><?php echo $employee['firstname']; ?></td>
                                                 <td><?php echo $employee['office_id']; ?></td>
                                                 <td><?php echo $employee['address']; ?></td>
+=======
+                                            <th>Last name</th>
+                                            <th>First name</th>
+                                            <th>Address</th>
+                                            <th>Office</th>
+                                            
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach($offices as $office) :
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $office['lastname']; ?></td>
+                                                <td><?php echo $office['firstname']; ?></td>
+                                                <td><?php echo $office['address']; ?></td>
+                                                <td><?php echo $office['office_name']; ?></td>
+
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
@@ -130,6 +174,7 @@
             </footer>
         </div>
     </div>
+<<<<<<< HEAD
     <!--   -->
     <!-- <div class="fixed-plugin">
     <div class="dropdown show-dropdown">
@@ -209,6 +254,9 @@
     </div>
 </div>
  -->
+=======
+    
+>>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
 </body>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
