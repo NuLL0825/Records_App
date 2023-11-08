@@ -23,8 +23,29 @@
     require('config/config.php');
     require('config/db.php');
 
+    // define total number of results you want per page
+    $results_per_page = 5;
+
+    // find the total number of results/rows stored in the db
+    $query = "SELECT * FROM office";
+    $result = mysqli_query($conn, $query);
+    $number_of_result = mysqli_num_rows($result);
+
+    // determine the total number of pages available
+    $number_of_page = ceil($number_of_result / $results_per_page);
+
+    // determine which page number visitor is currently on
+    if(!isset($_GET['page'])){
+        $page = 1;
+    } else {
+        $page = $_GET['page'];
+    }
+
+    // determine the sql LIMIT starting number for the results in the display page
+    $page_first_result = ($page-1) * $results_per_page;
+
     // CREATE QUERY
-    $query = 'SELECT * FROM office ORDER BY name';
+    $query = 'SELECT * FROM office ORDER BY name LIMIT '. $page_first_result . "," . $results_per_page;
 
     // Get the result
     $result = mysqli_query($conn, $query);
@@ -39,7 +60,7 @@
     mysqli_close($conn);
 ?>
     <div class="wrapper">
-        <div class="sidebar" data-image="/assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-image="assets/img/sidebar-5.jpg">
             
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php');?>
@@ -97,6 +118,14 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        for($page=1; $page <= $number_of_page; $page++){
+                            echo '<a href="office.php?page='. $page . '">' . $page . '</a>';
+                            if($page != $number_of_page){
+                                echo ", ";
+                            }
+                        }
+                    ?>
                 </div>
             </div>
             <footer class="footer">

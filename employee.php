@@ -4,11 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-<<<<<<< HEAD
     <link rel="icon" type="image/png" href="assets/img/favicon.ico">
-=======
-    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Light Bootstrap Dashboard - Free Bootstrap 4 Admin Dashboard by Creative Tim</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
@@ -26,23 +22,36 @@
 <?php
     require('config/config.php');
     require('config/db.php');
+    
+    // define total number of results you want per page
+    $results_per_page = 5;
+
+    // find the total number of results/rows stored in the db
+    $query = "SELECT * FROM employee";
+    $result = mysqli_query($conn, $query);
+    $number_of_result = mysqli_num_rows($result);
+
+    // determine the total number of pages available
+    $number_of_page = ceil($number_of_result / $results_per_page);
+
+    // determine which page number visitor is currently on
+    if(!isset($_GET['page'])){
+        $page = 1;
+    } else {
+        $page = $_GET['page'];
+    }
+
+    // determine the sql LIMIT starting number for the results in the display page
+    $page_first_result = ($page-1) * $results_per_page;
 
     // CREATE QUERY
-<<<<<<< HEAD
-    $query = 'SELECT * FROM employee';
-=======
-    $query = 'SELECT employee.lastname, employee.firstname, employee.address, office.name AS office_name FROM employee, office WHERE employee.office_id = office.id';
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
+    $query = 'SELECT * FROM employee LIMIT '. $page_first_result . "," . $results_per_page;
 
     // Get the result
     $result = mysqli_query($conn, $query);
 
     // Fetch the data
-<<<<<<< HEAD
     $employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
-=======
-    $offices = mysqli_fetch_all( $result, MYSQLI_ASSOC );
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
 
     // Free result
     mysqli_free_result($result);
@@ -51,22 +60,15 @@
     mysqli_close($conn);
 ?>
     <div class="wrapper">
-        <div class="sidebar" data-image="../assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-image="assets/img/sidebar-5.jpg">
             
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php');?>
-<<<<<<< HEAD
                 
             </div>
         </div>
         <div class="main-panel">
             <?php include('includes/navbar.php'); ?>
-=======
-            </div>
-        </div>
-        <div class="main-panel">
-            <?php include('includes/navbar.php');?>
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
             
             <div class="content">
                 <div class="container-fluid">
@@ -75,7 +77,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
-<<<<<<< HEAD
                             <br/>
                                 <div class="col-md-12">
                                     <a href="employee-add.php">
@@ -85,16 +86,10 @@
                                 <div class="card-header ">
                                     <h4 class="card-title">Employees</h4>
                                     <p class="card-category">Our beloved workforce.</p>
-=======
-                                <div class="card-header ">
-                                    <h4 class="card-title">Employees</h4>
-                                    <p class="card-category">Here is a subtitle for this table</p>
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
                                     <table class="table table-hover table-striped">
                                         <thead>
-<<<<<<< HEAD
                                             <th>Last Name</th>
                                             <th>First Name</th>
                                             <th>Office ID</th>
@@ -109,24 +104,6 @@
                                                 <td><?php echo $employee['firstname']; ?></td>
                                                 <td><?php echo $employee['office_id']; ?></td>
                                                 <td><?php echo $employee['address']; ?></td>
-=======
-                                            <th>Last name</th>
-                                            <th>First name</th>
-                                            <th>Address</th>
-                                            <th>Office</th>
-                                            
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            foreach($offices as $office) :
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $office['lastname']; ?></td>
-                                                <td><?php echo $office['firstname']; ?></td>
-                                                <td><?php echo $office['address']; ?></td>
-                                                <td><?php echo $office['office_name']; ?></td>
-
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
@@ -135,6 +112,14 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        for($page=1; $page <= $number_of_page; $page++){
+                            echo '<a href="employee.php?page='. $page . '">' . $page . '</a>';
+                            if($page != $number_of_page){
+                                echo ", ";
+                            }
+                        }
+                    ?>
                 </div>
             </div>
             <footer class="footer">
@@ -174,89 +159,7 @@
             </footer>
         </div>
     </div>
-<<<<<<< HEAD
-    <!--   -->
-    <!-- <div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-        <a href="#" data-toggle="dropdown">
-            <i class="fa fa-cog fa-2x"> </i>
-        </a>
-
-        <ul class="dropdown-menu">
-			<li class="header-title"> Sidebar Style</li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger">
-                    <p>Background Image</p>
-                    <label class="switch">
-                        <input type="checkbox" data-toggle="switch" checked="" data-on-color="primary" data-off-color="primary"><span class="toggle"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger background-color">
-                    <p>Filters</p>
-                    <div class="pull-right">
-                        <span class="badge filter badge-black" data-color="black"></span>
-                        <span class="badge filter badge-azure" data-color="azure"></span>
-                        <span class="badge filter badge-green" data-color="green"></span>
-                        <span class="badge filter badge-orange" data-color="orange"></span>
-                        <span class="badge filter badge-red" data-color="red"></span>
-                        <span class="badge filter badge-purple active" data-color="purple"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="header-title">Sidebar Images</li>
-
-            <li class="active">
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-1.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-3.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="..//assets/img/sidebar-4.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-5.jpg" alt="" />
-                </a>
-            </li>
-
-            <li class="button-container">
-                <div class="">
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard" target="_blank" class="btn btn-info btn-block btn-fill">Download, it's free!</a>
-                </div>
-            </li>
-
-            <li class="header-title pro-title text-center">Want more components?</li>
-
-            <li class="button-container">
-                <div class="">
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro" target="_blank" class="btn btn-warning btn-block btn-fill">Get The PRO Version!</a>
-                </div>
-            </li>
-
-            <li class="header-title" id="sharrreTitle">Thank you for sharing!</li>
-
-            <li class="button-container">
-				<button id="twitter" class="btn btn-social btn-outline btn-twitter btn-round sharrre"><i class="fa fa-twitter"></i> · 256</button>
-                <button id="facebook" class="btn btn-social btn-outline btn-facebook btn-round sharrre"><i class="fa fa-facebook-square"></i> · 426</button>
-            </li>
-        </ul>
-    </div>
-</div>
- -->
-=======
     
->>>>>>> 0805283ecaa9115803cd669a8309325a0e789d35
 </body>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
