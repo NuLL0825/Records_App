@@ -23,9 +23,43 @@
     require('config/config.php');
     require('config/db.php');
 
+    // gets the value sent over search form
+    #$search = $_GET['search'];
+    if(!isset($_GET['search'])){
+        $search = "";
+    } else {
+        $search = $_GET['search'];
+    }
+
+    // define total number of results you want per page
+    $results_per_page = 5;
+
+    // find the total number of results/rows stored in the db
+    $query = "SELECT * FROM transaction";
+    $result = mysqli_query($conn, $query);
+    $number_of_result = mysqli_num_rows($result);
+
+    // determine the total number of pages available
+    $number_of_page = ceil($number_of_result / $results_per_page);
+
+    // determine which page number visitor is currently on
+    if(!isset($_GET['page'])){
+        $page = 1;
+    } else {
+        $page = $_GET['page'];
+    }
+
+    // determine the sql LIMIT starting number for the results in the display page
+    $page_first_result = ($page-1) * $results_per_page;
+
     // CREATE QUERY
-    $query = 'SELECT transaction.remarks, transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname, ", ", employee.firstname) as employee_fullname FROM employee, office, transaction 
-    WHERE transaction.employee_id = employee.id and transaction.office_id = office.id';
+    if(strlen($search) > 0){
+        $query = 'SELECT transaction.remarks, transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname, ", ", employee.firstname) as employee_fullname FROM employee, office, transaction 
+        WHERE transaction.employee_id = employee.id and transaction.office_id = office.id and transaction.documentcode =' . $search . ' LIMIT '. $page_first_result . "," . $results_per_page;
+    } else {
+        $query = 'SELECT transaction.remarks, transaction.datelog, transaction.documentcode, transaction.action, office.name as office_name, CONCAT(employee.lastname, ", ", employee.firstname) as employee_fullname FROM employee, office, transaction 
+        WHERE transaction.employee_id = employee.id and transaction.office_id = office.id LIMIT '. $page_first_result . "," . $results_per_page;
+    }
 
     // Get the result
     $result = mysqli_query($conn, $query);
@@ -40,7 +74,7 @@
     mysqli_close($conn);
 ?>
     <div class="wrapper">
-        <div class="sidebar" data-image="../assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-image="assets/img/sidebar-5.jpg">
             
             <div class="sidebar-wrapper">
                 <?php include('includes/sidebar.php');?>
@@ -59,6 +93,10 @@
                             <div class="card strpied-tabled-with-hover">
                             <br/>
                                 <div class="col-md-12">
+                                    <form action="transaction.php" method="GET">
+                                        <input type="text" name="search"/>
+                                        <input type="submit" class="btn btn-info btn-fill" value="Search">
+                                    </form>
                                     <a href="transaction-add.php">
                                         <button type="submit" class="btn btn-info btn-fill pull-right">Add New Transaction</button>
                                     </a>
@@ -96,6 +134,14 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        for($page=1; $page <= $number_of_page; $page++){
+                            echo '<a href="transaction.php?page='. $page . '">' . $page . '</a>';
+                            if($page != $number_of_page){
+                                echo ", ";
+                            }
+                        }
+                    ?>
                 </div>
             </div>
             <footer class="footer">
